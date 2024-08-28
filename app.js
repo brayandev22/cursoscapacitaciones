@@ -1,10 +1,22 @@
 const express = require('express');
-const { poolPromise } = require('./dbConfig'); // Importar la configuración de la base de datos
-const sql = require('mssql'); // Importar el módulo mssql
+const mysql = require('mysql'); // Importar el módulo mysql
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+
+// Configuración de la base de datos MySQL
+const pool = mysql.createPool({
+    host: 'b2zvutfvurarprltu3dn-mysql.services.clever-cloud.com', // Cambia esto según tu configuración
+    user: 'ueaomjbmtjkdkrie',      // Cambia esto según tu configuración
+    password: 'wMiKJHJ28CoVfdk9pq9P', // Cambia esto según tu configuración
+    database: 'b2zvutfvurarprltu3dn', // Cambia esto según tu configuración
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+const promisePool = pool.promise();
 
 // Middleware para manejar la carga de archivos
 app.use(fileUpload());
@@ -21,26 +33,15 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
 });
 
-// Ruta para servir el archivo index-copy.html desde 'public/html'
-//app.get('/menu.html', (req, res) => {
-//    res.sendFile(path.join(__dirname, 'public', 'html', 'menu.html'));
-//});
-
 // Ruta para insertar datos desde el formulario de registro
 app.post('/api/registro', async (req, res) => {
     const { nombresCompletos, estado, usuario, email, password } = req.body;
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('nombresCompletos', sql.NVarChar, nombresCompletos)
-            .input('usuario', sql.NVarChar, usuario)
-            .input('email', sql.NVarChar, email)
-            .input('password', sql.NVarChar, password)
-            .input('estado', sql.NVarChar, estado)  // Valor por defecto
-            .input('codigoDocente', sql.NVarChar, '000')  // Valor por defecto
-            .query('INSERT INTO Usuarios (nombresCompletos, usuario, email, password, Estado, codigoDocente) VALUES (@nombresCompletos, @usuario, @email, @password, @estado, @codigoDocente)');
-        
+        await promisePool.query(
+            'INSERT INTO Usuarios (nombresCompletos, usuario, email, password, Estado, codigoDocente) VALUES (?, ?, ?, ?, ?, ?)',
+            [nombresCompletos, usuario, email, password, estado, '000']
+        );
         res.status(201).send('Usuario creado');
     } catch (err) {
         console.error('Error al ejecutar la consulta:', err);
@@ -52,27 +53,15 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-            .input('email', sql.NVarChar, email)
-            .input('password', sql.NVarChar, password)
-            .query('SELECT * FROM Usuarios WHERE email = @email AND password = @password');
+        const [rows] = await promisePool.query(
+            'SELECT * FROM Usuarios WHERE email = ? AND password = ?',
+            [email, password]
+        );
 
-        if (result.recordset.length > 0) {
-            const user = result.recordset[0]; // Datos del usuario autenticado
+        if (rows.length > 0) {
+            const user = rows[0];
             console.log(`Inicio de sesión exitoso para el usuario: ${email}`);
 
-            // Mostrar los datos del usuario en la consola
-            /*console.log('Datos del usuario:', {
-                nombresCompletos: user.nombresCompletos,
-                usuario: user.usuario,
-                email: user.email,
-                password: user.password,
-                estado: user.Estado,  // Incluye el estado
-                codigoDocente: user.codigoDocente  // Incluye el código del docente
-            });*/
-
-            // Responder con todos los datos del usuario autenticado, incluyendo los nuevos campos
             res.status(200).json({
                 message: 'Login successful',
                 user: {
@@ -80,8 +69,8 @@ app.post('/api/login', async (req, res) => {
                     usuario: user.usuario,
                     email: user.email,
                     password: user.password,
-                    estado: user.Estado,  // Incluye el estado
-                    codigoDocente: user.codigoDocente  // Incluye el código del docente
+                    estado: user.Estado,
+                    codigoDocente: user.codigoDocente
                 }
             });
         } else {
@@ -93,7 +82,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-
 // Ruta para agregar un nuevo curso
 app.post('/api/add-course', async (req, res) => {
     const { courseName, courseDescription, courseDays, courseHours, coursePrice } = req.body;
@@ -101,17 +89,10 @@ app.post('/api/add-course', async (req, res) => {
     const coursePDF = req.files.coursePDF ? req.files.coursePDF.data : null;
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('NombreCurso', sql.VarChar, courseName)
-            .input('Descripcion', sql.Text, courseDescription)
-            .input('Dias', sql.VarChar, courseDays)
-            .input('Horas', sql.VarChar, courseHours)
-            .input('Precio', sql.Decimal(10, 2), coursePrice)
-            .input('Imagen', sql.VarBinary, courseImage)
-            .input('ModulosPDF', sql.VarBinary, coursePDF)
-            .query('INSERT INTO Cursos (NombreCurso, Descripcion, Dias, Horas, Precio, Imagen, ModulosPDF) VALUES (@NombreCurso, @Descripcion, @Dias, @Horas, @Precio, @Imagen, @ModulosPDF)');
-        
+        await promisePool.query(
+            'INSERT INTO Cursos (NombreCurso, Descripcion, Dias, Horas, Precio, Imagen, ModulosPDF) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [courseName, courseDescription, courseDays, courseHours, coursePrice, courseImage, coursePDF]
+        );
         res.status(201).send('Curso agregado exitosamente');
     } catch (err) {
         console.error('Error al ejecutar la consulta:', err);
@@ -122,11 +103,11 @@ app.post('/api/add-course', async (req, res) => {
 // Ruta para obtener todos los cursos
 app.get('/api/get-courses', async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-            .query('SELECT Id, NombreCurso, Descripcion, Dias, Horas, Precio, Imagen, ModulosPDF FROM Cursos');
-        
-        const courses = result.recordset.map(course => ({
+        const [rows] = await promisePool.query(
+            'SELECT Id, NombreCurso, Descripcion, Dias, Horas, Precio, Imagen, ModulosPDF FROM Cursos'
+        );
+
+        const courses = rows.map(course => ({
             id: course.Id,
             name: course.NombreCurso,
             description: course.Descripcion,
@@ -136,7 +117,7 @@ app.get('/api/get-courses', async (req, res) => {
             imageUrl: course.Imagen ? `/api/course-image/${course.Id}` : null,
             pdfUrl: course.ModulosPDF ? `/api/course-pdf/${course.Id}` : null
         }));
-        
+
         res.status(200).json(courses);
     } catch (err) {
         console.error('Error al ejecutar la consulta:', err);
@@ -149,11 +130,10 @@ app.delete('/api/delete-course/:name', async (req, res) => {
     const courseName = req.params.name;
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('NombreCurso', sql.VarChar, courseName)
-            .query('DELETE FROM Cursos WHERE NombreCurso = @NombreCurso');
-        
+        await promisePool.query(
+            'DELETE FROM Cursos WHERE NombreCurso = ?',
+            [courseName]
+        );
         res.status(200).send('Curso eliminado exitosamente');
     } catch (err) {
         console.error('Error al ejecutar la consulta:', err);
@@ -168,34 +148,13 @@ app.put('/api/update-course', async (req, res) => {
     const coursePDF = req.files.coursePDF ? req.files.coursePDF.data : null;
 
     try {
-        const pool = await poolPromise;
-        const request = pool.request()
-            .input('OldNombreCurso', sql.VarChar, oldName)
-            .input('NombreCurso', sql.VarChar, name)
-            .input('Descripcion', sql.Text, description)
-            .input('Dias', sql.VarChar, days)
-            .input('Horas', sql.VarChar, hours)
-            .input('Precio', sql.Decimal(10, 2), price);
-        
-        if (courseImage) {
-            request.input('Imagen', sql.VarBinary, courseImage);
-        }
-        if (coursePDF) {
-            request.input('ModulosPDF', sql.VarBinary, coursePDF);
-        }
-
-        await request.query(`
+        await promisePool.query(`
             UPDATE Cursos
-            SET NombreCurso = @NombreCurso,
-                Descripcion = @Descripcion,
-                Dias = @Dias,
-                Horas = @Horas,
-                Precio = @Precio,
-                Imagen = CASE WHEN @Imagen IS NOT NULL THEN @Imagen ELSE Imagen END,
-                ModulosPDF = CASE WHEN @ModulosPDF IS NOT NULL THEN @ModulosPDF ELSE ModulosPDF END
-            WHERE NombreCurso = @OldNombreCurso
-        `);
-        
+            SET NombreCurso = ?, Descripcion = ?, Dias = ?, Horas = ?, Precio = ?, 
+                Imagen = COALESCE(?, Imagen), ModulosPDF = COALESCE(?, ModulosPDF)
+            WHERE NombreCurso = ?
+        `, [name, description, days, hours, price, courseImage, coursePDF, oldName]);
+
         res.status(200).send('Curso actualizado exitosamente');
     } catch (err) {
         console.error('Error al ejecutar la consulta:', err);
@@ -203,19 +162,18 @@ app.put('/api/update-course', async (req, res) => {
     }
 });
 
-
 // Ruta para servir la imagen de un curso
 app.get('/api/course-image/:id', async (req, res) => {
     const courseId = req.params.id;
 
     try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-            .input('Id', sql.Int, courseId)
-            .query('SELECT Imagen FROM Cursos WHERE Id = @Id');
-        
-        if (result.recordset.length > 0) {
-            const courseImage = result.recordset[0].Imagen;
+        const [rows] = await promisePool.query(
+            'SELECT Imagen FROM Cursos WHERE Id = ?',
+            [courseId]
+        );
+
+        if (rows.length > 0) {
+            const courseImage = rows[0].Imagen;
             res.setHeader('Content-Type', 'image/jpeg');
             res.send(courseImage);
         } else {
@@ -232,13 +190,13 @@ app.get('/api/course-pdf/:id', async (req, res) => {
     const courseId = req.params.id;
 
     try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-            .input('Id', sql.Int, courseId)
-            .query('SELECT ModulosPDF FROM Cursos WHERE Id = @Id');
-        
-        if (result.recordset.length > 0) {
-            const coursePDF = result.recordset[0].ModulosPDF;
+        const [rows] = await promisePool.query(
+            'SELECT ModulosPDF FROM Cursos WHERE Id = ?',
+            [courseId]
+        );
+
+        if (rows.length > 0) {
+            const coursePDF = rows[0].ModulosPDF;
             res.setHeader('Content-Type', 'application/pdf');
             res.send(coursePDF);
         } else {
@@ -249,7 +207,6 @@ app.get('/api/course-pdf/:id', async (req, res) => {
         res.status(500).send('Error en el servidor');
     }
 });
-
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3306;
