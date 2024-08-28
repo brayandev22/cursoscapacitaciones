@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>FORMULARIO DE REGISTRO E INICIO SESIÓN</title>
+</head>
+<body>
+    <div class="container-form login " id="login">
+        <div class="information">
+            <div class="info-childs">
+                <h2>¡¡Bienvenido nuevamente!!</h2>
+                <p>Para formar parte de esta difusion de cursos y capacitaciones por favor Inicia Sesión con tus datos</p>
+                <input type="button" value="Registrarse" id="sign-up">
+            </div>
+        </div>
+        <div class="form-information">
+            <div class="form-information-childs">
+                <h2>Iniciar Sesión</h2>
+                <form class="form form-login"novalidate>
+                    <div>
+                        <label class="correo">
+                            <i class='bx bx-envelope' ></i>
+                            <input id="auto" type="email" placeholder="Correo Electronico" name="userEmail" autocomplete="off">
+                        </label>
+                    </div>
+                    <div>
+                        <label class="contraseña">
+                            <i class='bx bx-lock-alt' ></i>
+                            <input type="password" placeholder="Contraseña" name="userPassword">
+                        </label>
+                    </div>
+                    <input type="submit" value="Iniciar Sesión" >
+                    <div class="alerta-error">Todos los campos son obligatorios</div>
+                    <div class="alerta-exito">Te registraste correctamente</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-form register hide">
+        <div class="information">
+            <div class="info-childs">
+                <h2>Bienvenido</h2>
+                <p>Para formar parte de esta difusion de cursos y capacitaciones por favor Inicia Sesión con tus datos</p>
+                <input type="button" value="Iniciar Sesión" id="sign-in">
+            </div>
+        </div>
+        <div class="form-information">
+            <div class="form-information-childs">
+                <h2>Crear una Cuenta</h2>
+                <form class="form form-register" novalidate>
+                     
+                    <div>
+                        <label class="nombre">
+                            <i class='bx bx-user-circle'></i>
+                            <input type="text" placeholder="Nombre completo" name="fullname" autocomplete="off" >
+                        </label>
+                    </div>
+                    <div>
+                        <label class="estado">
+                            <i class='bx bx-user-check'></i>
+                            <select name="estado" id="estado">
+                                <option value="">Seleccione Estado</option>
+                                <option value="alumno">Alumno</option>
+                                <option value="docente">Docente</option>
+                            </select>
+                        </label>
+                    </div>
+                    
+                    <div id="codigoDocenteContainer" style="display: none;">
+                        <label class="codigo-docente">
+                            <i class='bx bx-key'></i>
+                            <input type="text" placeholder="Código Docente" name="codigoDocente" autocomplete="off">
+                        </label>
+                    </div>
+                    <div>
+                        <label class="usuario">
+                            <i class='bx bx-user' ></i>
+                            <input type="text" placeholder="Usuario" name="userName" autocomplete="off" >
+                        </label>
+                    </div>
+                    <div>
+                        <label class="correo" >
+                            <i class='bx bx-envelope' ></i>
+                            <input type="email" placeholder="Correo Electronico" name="userEmail" autocomplete="off" >
+                        </label>
+                    </div>
+                   <div>
+                        <label class="contraseña">
+                            <i class='bx bx-lock-alt' ></i>
+                            <input type="password" placeholder="Contraseña" name="userPassword">
+                        </label>
+                   </div>
+                   
+                    <input type="submit" value="Registrarse">
+                    <div class="alerta-error">Todos los campos son obligatorios</div>
+                    <div class="alerta-exito">Te registraste correctamente</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/register.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

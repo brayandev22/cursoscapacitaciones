@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Cursos</title>
+    <link rel="stylesheet" href="../css/cursos.css">
+</head>
+<body>
+    <nav>
+        <button id="showForm">Agregar Curso</button>
+        <button id="showCourses">Ver Cursos</button>
+        <button class ="inicio-button"  type="button"><a href="menu.html">Inicio</a></button>
+    </nav>
+    
+    <div class="container">
+        <!-- Sección de Agregar Curso -->
+        <div id="formSection" class="section active">
+            <h2>Agregar Curso</h2>
+            <form id="courseForm" action="/api/add-course" method="POST" enctype="multipart/form-data">
+                <label for="courseName">Nombre del Curso:</label>
+                <input type="text" id="courseName" required>
+                
+                <label for="courseDescription">Descripción:</label>
+                <textarea id="courseDescription" maxlength="850" required></textarea>
+                
+                <label for="courseDays">Días:</label>
+                <input type="text" id="courseDays" required>
+                
+                <label for="courseHours">Horas:</label>
+                <input type="text" id="courseHours" required>
+                
+                <label for="coursePrice">Precio:</label>
+                <input type="text" id="coursePrice" required>
+                
+                <label for="courseImage">Imagen:</label>
+                <input type="file" id="courseImage" accept="image/*" required>
+
+                <label for="coursePDF">Añadir Módulos (PDF):</label>
+                <input type="file" id="coursePDF" accept="application/pdf">
+                
+                <button type="submit">Agregar Curso</button>
+            </form>
+        </div>
+        
+        <!-- Sección de Ver Cursos -->
+        <div id="coursesSection" class="section">
+            <h2>Ver Cursos</h2>
+            <div id="coursesList"></div>
+        </div>
+    </div>
+    
+    <script src="../js/cursos.js"></script>
+</body>
+</html>

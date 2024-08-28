@@ -1,0 +1,80 @@
+/* Estilos Generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('../img/perfil.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    backdrop-filter: blur(8px); /* Desenfoque para el fondo */
+}
+
+/* Contenedor principal */
+.perfil-container {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 450px; /* Ancho ligeramente aumentado para menos espacio en blanco */
+    width: 100%;
+    text-align: center;
+}
+
+/* Título principal */
+h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #007bff; /* Azul principal */
+}
+
+/* Estilos de los datos del perfil */
+.perfil-datos p {
+    font-size: 18px;
+    margin: 15px 0; /* Aumentar el espacio entre las filas */
+    color: #555;
+    padding: 8px 0; /* Reducir el espacio en blanco alrededor */
+}
+
+/* Resaltar los títulos de los campos */
+.perfil-datos p strong {
+    color: #4a4a4a; /* Gris oscuro en lugar de rosa */
+}
+
+/* Botón para volver al menú */
+.volver-menu {
+    display: block;
+    margin: 20px 0;
+    padding: 12px;
+    background-color: #007bff; /* Azul principal */
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.volver-menu:hover {
+    background-color: #0056b3;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 600px) {
+    .perfil-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .perfil-datos p {
+        font-size: 16px;
+    }
+
+    .volver-menu {
+        font-size: 16px;
+    }
+}

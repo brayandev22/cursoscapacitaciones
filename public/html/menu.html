@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página web</title>
+    <link rel="stylesheet" href="../css/estilos copy3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    
+    <header class="header" id="inicio">
+        <img class="header-bars" src="../img/bars.svg" alt="">
+        <nav class="menu-navegacion">
+                <a href="#inicio" class="inicio">Inicio</a>
+                <a href="#servicio">Conocenos</a>
+                <a href="#cursos">cursos</a>
+                <a href="#expertos">Especializados</a>
+                <a href="#footer">Contacto</a>
+                <a href="cursos.html" target="_blank" id="cursos2" style="display: none;">Agregar curso</a>
+                <div class="user">
+                    <i class='bx bxs-user-circle'></i>
+                    <label id="nombre-user"></label>
+                </div>
+                <script>
+                    document.getElementById('nombre-user').addEventListener('click', function() {
+                        window.location.href = 'perfil.html';
+                    });
+                </script>
+                    <div class="logout-container" style="text-align: center; margin-top: 20px;">
+                        <button onclick="window.location.href='index.html'" class="logout-button" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Cerrar Sesión</button>
+                    </div>
+        </nav>
+        <div class="contenedor head">
+            <h1 class="titulo">¡Bienvenido a tu próxima aventura de aprendizaje!</h1>
+            <p class="copy">En este espacio, te invitamos a explorar un mundo de oportunidades a través de nuestros cursos extracurriculares. 
+                Sabemos que el aprendizaje no se detiene en el aula, y cada habilidad que adquieres te acerca a tus metas personales y profesionales.
+                 En un mundo en constante evolución, es crucial mantenerse al día y seguir desarrollando nuestras habilidades. Este portal centraliza 
+                 la información de los cursos disponibles en la Facultad de Ingeniería de Industrial y de Sistemas, convirtiéndose en una herramienta
+                  clave para quienes buscan capacitarse y explorar nuevas áreas de conocimiento. Aquí encontrarás la formación que necesitas para 
+                  enfrentar los desafíos actuales y expandir tus horizontes, todo en un solo lugar.</p>
+        </div>
+        
+    </header>
+    <main>
+        <section class="services contenedor" id="servicio">
+            <h2 class="subtitulo">sobre nosotros</h2>
+            <div class="contenedor-servicio">
+                <img src="../img/checklist.svg" alt="">
+                <div class="checklist-servicio">
+                    <div class="service">
+                        <h3 class="n-service"></h3>
+                        <p> Somos un grupo dedicado a mejorar la experiencia educativa en la Facultad de Ingeniería de Industrial y 
+                            de Sistemas de la Universidad Nacional Federico Villarreal. Creemos en hacer más fácil el acceso a la 
+                            información sobre los cursos, por eso creamos este portal. Nuestro objetivo es ayudar a los estudiantes y 
+                            docentes a encontrar rápidamente todo lo que necesitan para su formación académica. Trabajamos con compromiso
+                             y pasión para ofrecer una herramienta útil que te apoye en tu camino educativo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="cursos">
+        <div id="mainContent">
+            <h2>CURSOS</h2>
+            <div id="cardSection" class="container">
+                <div id="mainCardContainer" class="card-container">
+                    <!-- Las tarjetas se cargarán aquí -->
+                </div>
+            </div>
+        </section>
+        <section class="contenedor" id="expertos">
+            <h2 class="subtitulo">Expertos en:</h2>
+            <section class="experts">
+                <div class="cont-expert">
+                    <img src="../img/pie_chart.svg" alt="">
+                    <h3 class="n-expert">Analisis</h3>
+                </div>
+                <div class="cont-expert">
+                    <img src="../img/search_engine.svg" alt="">
+                    <h3 class="n-expert">SEO</h3>
+                </div>
+                <div class="cont-expert">
+                    <img src="../img/security.svg" alt="">
+                    <h3 class="n-expert">Seguridad</h3>
+                </div>
+                <div class="cont-expert">
+                    <img src="../img/datos.png" alt="">
+                    <h3 class="n-expert">Base de datos</h3>
+                </div>
+                <div class="cont-expert">
+                    <img src="../img/innova.png" alt="">
+                    <h3 class="n-expert">Innovación</h3>
+                </div>
+                <div class="cont-expert">
+                    <img src="../img/wed.png" alt="">
+                    <h3 class="n-expert">Desarrollo</h3>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="contenedor footer-content">
+                <div class="contact-us">
+                    <h2 class="brand">GRUPO3</h2>
+                 <p>Somos expertos en la creación de conocimientos</p>
+                 <p>        Integrantes:</p>
+                 <ul>
+                  <li>Brayan Jesús Gamarra Susaya</li>
+                  <li>Campuzano Suyo Antonio Isabel</li>
+                  <li>Llacsa Solier Fernando Jose</li>
+                  <li>Chavarría Alfaro Jimena del Carmen</li>
+                 </ul>
+                </div>
+                <div class="social-media">
+                    <a href="https://www.facebook.com/UNFV.EDU/?locale=es_LA" class="social-media-icon" id="bxl-facebook" target="_blank">
+                        <i class='bx bxl-facebook'></i>
+                    </a>
+                    <a href="https://x.com/UNFVoficial?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor&prefetchTimestamp=1724028466144" class="social-media-icon" id="bxl-twitter" target="_blank">
+                        <i class='bx bxl-twitter' ></i>
+                    </a>
+                    <a href="https://www.instagram.com/unfvoficial/?hl=es" class="social-media-icon" id="bxl-instagram" target="_blank">
+                        <i class='bx bxl-instagram' ></i>
+                    </a>
+                </div>
+        </div>
+        <div class="line"></div>
+    </footer>
+    <script src="../js/main.js"></script>
+    <script src="../js/cursos.js"></script>
+
+</body>
+</html>
